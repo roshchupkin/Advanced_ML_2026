@@ -1,0 +1,8 @@
+# Data and weights downloaded by the notebooks at runtime
+medmnist_data/
+cached_weights/
+
+# Notebook and Python scratch
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
