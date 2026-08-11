@@ -5,12 +5,20 @@
 | File | Content | Duration |
 |---|---|---|
 | `01_CNN_Explainability_Health.ipynb` | Practical 1: CNNs and explainability in medical imaging (PneumoniaMNIST) | 80-90 min |
-| `02_Autoencoder_Latent_Space_Health.ipynb` | Practical 2: autoencoders and latent representations (BloodMNIST) | 80-85 min |
+| `02_Autoencoder_Latent_Space_Health.ipynb` | Practical 2: *What Is Hidden in a Learned Representation?* (BloodMNIST) | 80-85 min |
+| `weights/` | Instructor fallback checkpoints (`TRAIN_*=False` class default) | - |
 | `README_Instructor.md` | This file: timing, compute profile, licences, citations, full solutions | - |
 
 The two notebooks are **independent**. Either can be taught first, and either can be dropped if
 time is short. Both assume the participants have already attended lectures on CNNs, autoencoders
 and diffusion models, and that a transformer lecture follows.
+
+**Class default:** leave `TRAIN_CLEAN`, `TRAIN_SHORTCUT`, and `TRAIN_AUTOENCODER` as `False` so
+students load the committed files in `weights/` (downloaded automatically from GitHub if missing).
+Set a flag to `True` only when you want a group to reproduce training.
+
+Each notebook marks **CORE** versus **EXTENSION** near the top. In a tight 3-hour session, cut
+extensions first (NB1 optional challenges; NB2 bottleneck/harmonization/label-efficiency/UMAP).
 
 ### How to distribute
 
@@ -247,44 +255,42 @@ remember the finding and forget the caveat.
 # 4. Pre-course test checklist
 
 Run this **on the morning of the course, in a fresh Colab CPU runtime** (Runtime > Disconnect and
-delete runtime first). Zenodo availability and torchvision weight URLs are the two things that can
-break without warning.
+delete runtime first). Zenodo availability, GitHub raw weight URLs, and torchvision ImageNet weights
+are the three things that can break without warning.
 
-## Notebook 1
+## Path A — class default (`TRAIN_*=False`)
+
+Confirm the panic-button path students will actually use.
+
+| Notebook | Cell | What to check |
+|---|---|---|
+| 1 | 3 | prints `TRAIN_CLEAN=False, TRAIN_SHORTCUT=False` |
+| 1 | 18 | `loaded instructor weights from weights/cnn_pneumoniamnist.pt` (or GitHub download) |
+| 1 | 43 | `loaded instructor weights from weights/cnn_shortcut.pt` |
+| 1 | 19, 44, 45 | metrics and Grad-CAM still look sensible with loaded weights |
+| 2 | 3 | prints `TRAIN_AUTOENCODER=False` |
+| 2 | 9 | `loaded instructor weights from weights/autoencoder_bloodmnist.pt` |
+| 2 | 11–12, 28–30 | reconstructions and site AUC still look sensible |
+
+## Path B — retrain once (`TRAIN_*=True`)
+
+Optional but recommended before the course, so you know the fallback numbers if a student flips the flag.
 
 | Cell | What it does | What to check |
 |---|---|---|
-| 3 | setup, imports, device detection | prints torch/torchvision versions, `DEVICE = CPU`, RAM line |
-| 4 | downloads `pneumoniamnist_64.npz` | "MD5 verified.", class counts print (4708/524/624) |
-| 6 | hand-crafted kernels | five filtered images appear |
-| 13 | **downloads ResNet-18 ImageNet weights** | no HTTP error; prints 11,689,512 parameters |
-| 15 | ImageNet head on X-rays | top-3 labels appear (nonsense labels are the expected result) |
-| 18 | **trains SmallCNN** | 6 epoch lines; note the wall-clock time in the timing table |
-| 19 | test metrics | accuracy typically ~0.85-0.95, ROC-AUC ~0.93-0.99 |
-| 22, 23 | feature maps | grids render, no hook errors |
-| 29 | **Grad-CAM** | prints activation/gradient shapes `(6, 64, 16, 16)`; overlays render |
-| 30 | Grad-CAM variants incl. ResNet-18 `layer4` | works and looks blocky (2x2 grid), as intended |
-| 37 | perturbation over 60 images | box/scatter plot; "CAM patch caused the larger drop in X%" |
-| 43 | **trains the shortcut model** | 6 epoch lines, validation accuracy very high (often >0.97) |
-| 44 | three-test-set comparison | large drop for the shortcut model on clean/swapped sets |
-| 45 | Grad-CAM on the shortcut model | attention visibly on the corner marker |
+| NB1 18 | **retrains** clean SmallCNN | 6 epoch lines; note wall-clock time |
+| NB1 43 | **retrains** shortcut SmallCNN | high Site-A validation accuracy |
+| NB2 9 | **retrains** autoencoder | MSE falling to roughly 0.002–0.006 |
 
-## Notebook 2
+## Shared cells (either path)
 
-| Cell | What it does | What to check |
+| Notebook | Cell | What to check |
 |---|---|---|
-| 3 | setup | as above |
-| 4 | downloads `bloodmnist.npz` | "MD5 verified.", per-class counts print |
-| 5 | subsets and tensors | `train tensor (5600, 3, 28, 28)` |
-| 9 | **trains the autoencoder** | loss lines every 2 epochs, MSE falling to roughly 0.002-0.006; record wall-clock time |
-| 11, 12 | reconstructions, best/worst | three-row figure renders; errors printed |
-| 17 | latent extraction | prints `Z_tr shape: (5600, 32)` |
-| 19 | PCA of latents | coloured scatter with visible class structure; silhouette printed |
-| 22, 23 | pixel PCA vs latent PCA, k-NN | both accuracies print, clearly above 0.125 |
-| 28-30 | **simulated site effect** | site-prediction ROC-AUC should be high (usually >0.9); note the value |
-| 35 | latent interpolation | two rows of 9 images |
-| 38 | linear probe | accuracies print; latent probe typically 0.75-0.90 |
-| 44 | UMAP (optional) | either two panels, or a clean "UMAP unavailable" message |
+| 1 | 4 | downloads `pneumoniamnist_64.npz`, MD5 verified |
+| 1 | 13 | ResNet-18 ImageNet weights download |
+| 1 | 29 | Grad-CAM shapes `(6, 64, 16, 16)` |
+| 2 | 4 | downloads `bloodmnist.npz`, MD5 verified |
+| 2 | 30 | site-prediction ROC-AUC usually >0.9 |
 
 If cell 30's site-prediction AUC comes out near 0.5, the simulated effect was too weak for the
 particular trained autoencoder: increase the effect in `site_b_effect` (for example `gamma=0.75`,
@@ -295,11 +301,13 @@ particular trained autoencoder: increase the effect in `site_b_effect` (for exam
 | Measurement | Your value |
 |---|---|
 | NB1 cell 4 download | |
-| NB1 cell 13 weight download | |
-| NB1 cell 18 training | |
-| NB1 cell 43 training | |
+| NB1 cell 13 ImageNet weight download | |
+| NB1 cell 18 instructor-weight load | |
+| NB1 cell 18 retrain (optional) | |
+| NB1 cell 43 instructor-weight load | |
 | NB2 cell 4 download | |
-| NB2 cell 9 training | |
+| NB2 cell 9 instructor-weight load | |
+| NB2 cell 9 retrain (optional) | |
 | NB2 cell 30 site AUC | |
 
 ---
@@ -318,7 +326,9 @@ particular trained autoencoder: increase the effect in `site_b_effect` (for exam
 | `roc_auc_score` raises about missing classes | a class is absent from the test subset after edits | Keep the balanced subsets, or pass `labels=range(8)`. |
 | UMAP import fails after install (numba/llvmlite conflict) | Colab dependency drift | Skip the section; it is optional by design and the notebook handles it in a `try/except`. |
 | A Grad-CAM cell raises `element 0 of tensors does not require grad` | the model was wrapped in `torch.no_grad()` | Grad-CAM must run outside `no_grad`; the class already sets `x.requires_grad_(True)`. Do not add `@torch.no_grad()` to a cell that calls `cam_engine`. |
-| Kernel restart / disconnect mid-session | Colab idle timeout | Re-run all cells from the top: the data and the trained weights are on disk, so recovery takes seconds, not minutes. |
+| Kernel restart / disconnect mid-session | Colab idle timeout | Re-run all cells from the top: with `TRAIN_*=False`, recovery is seconds (reload instructor weights). |
+| Instructor weight download fails | GitHub raw URL blocked / offline | Place the three `.pt` files from the repo `weights/` folder into a local `weights/` directory in the Colab working directory, or set `TRAIN_*=True` and retrain. |
+| Student accidentally set `TRAIN_*=True` and waits | Flag flipped | Tell them to interrupt the cell, set the flag back to `False`, Runtime > Restart session, and re-run from the top. |
 
 ---
 
@@ -968,6 +978,12 @@ You must change the data (multi-site, matched design), the input (crop/normalise
 (invariance penalty) - all of which discard information. (5) Defensible ranking: an external test
 set from a different vendor or multi-centre training data first (both directly attack
 transportability), prospective evaluation next, attribution figures last.
+(6) **Internal AUC 0.94 / external AUC 0.71 with changing Grad-CAM.** Investigate *before*
+retraining: scanner/protocol and reconstruction kernels; prevalence and case-mix shift; acquisition
+artefacts and annotations that differ by site; demographic composition; label definition and
+grading practice; selection into the imaging pathway; calibration drift; and shortcut features that
+were predictive internally but absent externally. Retraining on the same design will often
+reproduce the same failure. Fix the measurement and transportability problem first.
 
 ## Notebook 2
 

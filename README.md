@@ -1,139 +1,109 @@
-# Advanced Data Science and Machine Learning for Health Research
+# Advanced Machine Learning for Health Research
 
-Teaching materials for a 3-hour practical session in an **Advanced Data Science and Machine Learning for Health Research** summer course.
+**NIHES Summer Programme 2026**
 
-This repository contains two independent Google Colab notebooks designed for clinical researchers, epidemiologists, biomedical scientists, and data scientists with prior experience in Python, basic machine learning, train/validation/test splitting, cross-validation, overfitting, regularization, and basic neural networks.
+Practical materials for the Advanced Machine Learning for Health Research course.
 
-The practical sits after lectures on:
+**Faculty:** Gennady Roshchupkin, Daniel Bos, Kamran Ikram
 
-- neural networks and convolutional neural networks
-- autoencoders
-- diffusion models
+## Course week
 
-and before a later lecture on transformers.
+| Day | Topic |
+| --- | --- |
+| Monday | Neural Networks & CNNs |
+| Tuesday | Autoencoders |
+| Wednesday | Diffusion Models |
+| Thursday | **Hands-on practicals ← this repository** |
+| Friday | Transformers & advanced applications |
 
-## Practical Overview
+These two notebooks are written for clinical researchers, epidemiologists, biomedical scientists, and data scientists who already know Python, basic machine learning, train/validation/test splitting, cross-validation, overfitting, regularization, and basic neural networks.
 
-The session is split into two notebooks:
+## Open in Colab
 
-1. `01_CNN_Explainability_Health.ipynb`
-2. `02_Autoencoder_Latent_Space_Health.ipynb`
+| Practical | Notebook | Colab |
+| --- | --- | --- |
+| 1 | What Is a Convolutional Neural Network Looking At? | [Open in Colab](https://colab.research.google.com/github/roshchupkin/Advanced_ML_2026/blob/main/01_CNN_Explainability_Health.ipynb) |
+| 2 | What Is Hidden in a Learned Representation? | [Open in Colab](https://colab.research.google.com/github/roshchupkin/Advanced_ML_2026/blob/main/02_Autoencoder_Latent_Space_Health.ipynb) |
 
-Each notebook is designed for roughly **75-90 minutes** and combines:
+No Drive mount, Kaggle token, institutional login, or manual upload is required. Use a normal Google account and a fresh Colab runtime.
 
-- concise theory
-- executable code
-- visual outputs
-- interpretation questions
-- short coding exercises
-- health-research discussion
+## What you will learn
 
-The emphasis is on **model exploration, critical interpretation, and external validity**, not on large-scale training.
+Both practicals ask one scientific question:
 
-## Notebooks
+> A model that predicts well is not the same as a model that measures what you think it measures.
 
-### Practical 1
+### Practical 1 — CNNs and explainability (~75–90 min)
 
-**What Is a Convolutional Neural Network Looking At?**
-
-Topics include:
-
-- hierarchical CNN representations
-- feature maps
-- pretrained convolutional networks
-- Grad-CAM
-- perturbation-based analysis
-- shortcut learning in medical imaging
+- hierarchical CNN representations and feature maps
+- Grad-CAM (implemented transparently, not as a black-box library)
+- perturbation tests of attribution claims
+- a **simulated** shortcut-learning experiment
 - confounding, domain shift, and external validity
 
-Open in Colab:
+**CORE:** feature maps → Grad-CAM → perturbation → shortcut experiment  
+**EXTENSION:** optional challenges at the end
 
-- [Practical 1 in Colab](https://colab.research.google.com/github/roshchupkin/Advanced_ML_2026/blob/main/01_CNN_Explainability_Health.ipynb)
+### Practical 2 — Autoencoders and latent representations (~75–90 min)
 
-### Practical 2
+- encoder–decoder bottlenecks and reconstruction quality
+- latent vectors as derived features
+- PCA in pixel space versus latent space
+- a **simulated** two-site acquisition/domain-shift experiment
+- latent interpolation and a short bridge to latent diffusion
 
-**What Does an Autoencoder Learn About Patients?**
+**CORE:** reconstruction → latent PCA → simulated site effect → latent interpolation  
+**EXTENSION:** bottleneck size, harmonization, label efficiency, UMAP
 
-Topics include:
+## Computational design (CPU-first)
 
-- encoder-decoder architectures
-- bottlenecks and reconstruction loss
-- latent representations
-- PCA in original and latent spaces
-- simulated site effects and batch/domain shift
-- latent interpolation
-- downstream prediction from learned features
-- conceptual links to latent diffusion
-
-Open in Colab:
-
-- [Practical 2 in Colab](https://colab.research.google.com/github/roshchupkin/Advanced_ML_2026/blob/main/02_Autoencoder_Latent_Space_Health.ipynb)
-
-## Computational Design
-
-These materials were written specifically for **Google Colab**, assuming the worst case of a **CPU-only runtime**.
-
-Core design constraints:
-
-- no GPU is required
-- no Google Drive mount is required
-- no Kaggle access is required
-- no institutional credentials are required
-- no manual data upload is required
-- no private datasets are used
+Designed for the worst case: a **CPU-only Colab runtime**. A GPU helps if present but is never required.
 
 Approximate practical-wide requirements:
 
-- downloads: about **101 MB** for the core path
-- peak RAM: about **2-2.5 GB**
-- heavy compute: about **6-10 CPU minutes** total
+- downloads: about **101 MB** for the core path (plus ~1 MB instructor weights)
+- peak RAM: about **2–2.5 GB**
+- heavy compute if you retrain: about **6–10 CPU minutes** total
 
-All datasets are downloaded automatically from public sources. Any optional package installation is clearly separated from the core teaching path.
+### Class default: do not retrain
+
+Each notebook has explicit flags near the top of the setup:
+
+```python
+TRAIN_CLEAN = False       # Notebook 1
+TRAIN_SHORTCUT = False    # Notebook 1
+TRAIN_AUTOENCODER = False # Notebook 2
+```
+
+With these set to `False` (the class default), models load small committed checkpoints from [`weights/`](weights/). If a local copy is missing, the notebook downloads them from this repository automatically. Set a flag to `True` only if you want to reproduce training.
 
 ## Datasets
 
-The notebooks use lightweight public biomedical datasets from **MedMNIST / MedMNIST+**:
+Public biomedical datasets from **MedMNIST / MedMNIST+** ([medmnist.com](https://medmnist.com/)):
 
-- **PneumoniaMNIST (64x64)** for the CNN and explainability practical
-- **BloodMNIST (28x28)** for the autoencoder and latent-space practical
+- **PneumoniaMNIST (64×64)** — paediatric chest radiographs for Practical 1
+- **BloodMNIST (28×28)** — peripheral blood cell microscopy for Practical 2
 
-These datasets are intended for **research and education**, not clinical use.
+BloodMNIST is used because its small image size makes representation-learning experiments possible on CPU while retaining biologically meaningful visual heterogeneity.
 
-## Repository Files
+These datasets are for **research and education**, not clinical use. Notebooks document provenance, licences, and citations, and label every simulated manipulation explicitly.
 
-- `01_CNN_Explainability_Health.ipynb` — student practical on CNNs and explainability
-- `02_Autoencoder_Latent_Space_Health.ipynb` — student practical on autoencoders and latent representations
-- `README_Instructor.md` — instructor-facing guide with timings, compute profile, citations, pre-course checks, and complete exercise solutions
+## Repository contents
 
-## For Instructors
+- [`01_CNN_Explainability_Health.ipynb`](01_CNN_Explainability_Health.ipynb) — student Practical 1
+- [`02_Autoencoder_Latent_Space_Health.ipynb`](02_Autoencoder_Latent_Space_Health.ipynb) — student Practical 2
+- [`weights/`](weights/) — instructor fallback checkpoints (class panic button)
+- [`README_Instructor.md`](README_Instructor.md) — timings, compute profile, citations, pre-course checklist, full exercise solutions
+- [`LICENSE`](LICENSE) — MIT
 
-If you are teaching from this repository, start with:
+## For instructors
 
-- `README_Instructor.md`
-
-It contains:
-
-- timing tables
-- expected runtime and memory profile
-- package and license notes
-- data and model citations
-- a pre-course Colab smoke-test checklist
-- known failure modes
-- full solutions for all exercises
+Start with [`README_Instructor.md`](README_Instructor.md). It includes timing tables, smoke-test cells, known failure modes, and complete solutions. Before class, run both notebooks once in a fresh **CPU-only Colab** with `TRAIN_*=False`, and once with training enabled if you want to verify the retrain path.
 
 ## Citation
 
-If you reuse the teaching materials, please cite the underlying datasets and models as described in the notebooks and in `README_Instructor.md`.
+If you reuse the teaching materials or the underlying data, cite the MedMNIST papers and the source datasets as listed in the notebooks and the instructor guide (Yang et al., *Scientific Data* 2023; Kermany et al., *Cell* 2018; Acevedo et al., *Data in Brief* 2020).
 
-Key dataset references include:
+## Licence
 
-- Yang et al., *Scientific Data* 2023, MedMNIST v2
-- Yang et al., *ISBI* 2021, MedMNIST Classification Decathlon
-- Kermany et al., *Cell* 2018, source study for PneumoniaMNIST
-- Acevedo et al., *Data in Brief* 2020, source study for BloodMNIST
-
-## Notes
-
-- The notebooks intentionally ship **without stored outputs**.
-- Simulated shortcut-learning and simulated site effects are explicitly labelled inside the notebooks.
-- The materials are designed to encourage students to ask not only whether a model predicts well, but also **what information it is actually using**.
+Teaching code and materials in this repository are released under the [MIT License](LICENSE). Dataset licences remain those of MedMNIST / the original source studies (typically CC BY 4.0; see each notebook).
