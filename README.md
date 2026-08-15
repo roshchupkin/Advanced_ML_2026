@@ -2,6 +2,8 @@
 
 **NIHES Summer Programme 2026**
 
+![Course overview: CNN explainability and autoencoder latent-space practicals](poster.png)
+
 Practical materials for the Advanced Machine Learning for Health Research course.
 
 **Faculty:** Gennady Roshchupkin, Daniel Bos, Kamran Ikram
@@ -92,6 +94,7 @@ These datasets are for **research and education**, not clinical use. Notebooks d
 
 - [`01_CNN_Explainability_Health.ipynb`](01_CNN_Explainability_Health.ipynb) — student Practical 1
 - [`02_Autoencoder_Latent_Space_Health.ipynb`](02_Autoencoder_Latent_Space_Health.ipynb) — student Practical 2
+- [`poster.png`](poster.png) — course overview graphic
 - [`weights/`](weights/) — instructor fallback checkpoints (class panic button)
 - [`README_Instructor.md`](README_Instructor.md) — timings, compute profile, citations, pre-course checklist, full exercise solutions
 - [`LICENSE`](LICENSE) — MIT
