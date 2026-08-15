@@ -6,7 +6,7 @@
 
 Practical materials for the Advanced Machine Learning for Health Research course.
 
-**Faculty:** Gennady Roshchupkin, Daniel Bos, Kamran Ikram
+**Faculty:** Gennady Roshchupkin, Kamran Ikram
 
 ## Course week
 
