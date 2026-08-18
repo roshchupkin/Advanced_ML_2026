@@ -1,6 +1,6 @@
 # Instructor Guide
 
-## Advanced Data Science and Machine Learning for Health Research - 3-hour practical
+## [Advanced Data Science and Machine Learning for Health Research](https://erasmussummerprogramme.nl/summer-programme-courses/advanced-data-science-and-machine-learning-for-health-research) - 3-hour practical
 
 | File | Content | Duration |
 |---|---|---|

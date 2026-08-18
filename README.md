@@ -1,10 +1,11 @@
-# Advanced Machine Learning for Health Research
+# Advanced Data Science and Machine Learning for Health Research
 
-**NIHES Summer Programme 2026**
+**NIHES Summer Programme 2026**  
+[Course page](https://erasmussummerprogramme.nl/summer-programme-courses/advanced-data-science-and-machine-learning-for-health-research)
 
 ![Course overview: CNN explainability and autoencoder latent-space practicals](poster.png)
 
-Practical materials for the Advanced Machine Learning for Health Research course.
+Practical materials for the Advanced Data Science and Machine Learning for Health Research course.
 
 **Faculty:** Gennady Roshchupkin, Kamran Ikram
 
