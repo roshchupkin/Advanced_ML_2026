@@ -2,9 +2,6 @@
 medmnist_data/
 cached_weights/
 
-# Local instructor answer key (do not publish)
-TEACHER_ANSWERS.md
-
 # Notebook and Python scratch
 .ipynb_checkpoints/
 __pycache__/

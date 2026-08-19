@@ -97,12 +97,12 @@ These datasets are for **research and education**, not clinical use. Notebooks d
 - [`02_Autoencoder_Latent_Space_Health.ipynb`](02_Autoencoder_Latent_Space_Health.ipynb) — student Practical 2
 - [`poster.png`](poster.png) — course overview graphic
 - [`weights/`](weights/) — instructor fallback checkpoints (class panic button)
-- [`README_Instructor.md`](README_Instructor.md) — timings, compute profile, citations, pre-course checklist
+- [`README_Instructor.md`](README_Instructor.md) — timings, compute profile, citations, pre-course checklist, full exercise solutions
 - [`LICENSE`](LICENSE) — MIT
 
 ## For instructors
 
-Start with [`README_Instructor.md`](README_Instructor.md). It includes timing tables, smoke-test cells, and known failure modes. Before class, run both notebooks once in a fresh **CPU-only Colab** with `TRAIN_*=False`, and once with training enabled if you want to verify the retrain path.
+Start with [`README_Instructor.md`](README_Instructor.md). It includes timing tables, smoke-test cells, known failure modes, and complete solutions. Before class, run both notebooks once in a fresh **CPU-only Colab** with `TRAIN_*=False`, and once with training enabled if you want to verify the retrain path.
 
 ## Citation
 
