@@ -17,8 +17,9 @@ and diffusion models, and that a transformer lecture follows.
 students load the committed files in `weights/` (downloaded automatically from GitHub if missing).
 Set a flag to `True` only when you want a group to reproduce training.
 
-Each notebook marks **CORE** versus **EXTENSION** near the top. In a tight 3-hour session, cut
-extensions first (NB1 optional challenges; NB2 bottleneck/harmonization/label-efficiency/UMAP).
+Each notebook marks **CORE** versus **ADDITIONAL** near the top. CORE is run-the-cells and
+discuss with a neighbour: participants are not expected to write answers down or write Python.
+The coding exercises are extra. In a tight 3-hour session, skip all additional coding.
 
 ### How to distribute
 
@@ -50,11 +51,11 @@ one thing, it should be the habit of asking *what else could explain this result
 | Setup, data download, dataset/reproducibility discussion | 0-4 | 5 |
 | Part 1: convolution recap, kernels, receptive fields | 5-8 | 8 |
 | Part 2 + Part 3: data inspection, CNN architecture, parameters, tensor shapes, training, predictions | 9-20 | 10 |
-| Part 4: feature maps + Exercise 1 | 21-26 | 15 |
-| Part 5: Grad-CAM + Exercise 2 | 27-33 | 20 |
-| Part 6: perturbation + Exercise 3 | 34-40 | 10 |
-| Part 7: simulated shortcut learning + Exercise 4 | 41-48 | 20 |
-| Optional challenges, wrap-up, plenary discussion | 49-51 | 10 |
+| Part 4: feature maps (Exercise 1 additional) | 21-26 | 15 |
+| Part 5: Grad-CAM (Exercise 2 additional) | 27-33 | 20 |
+| Part 6: perturbation (Exercise 3 additional) | 34-40 | 10 |
+| Part 7: simulated shortcut learning (Exercise 4 additional) | 41-48 | 20 |
+| Wrap-up, plenary discussion | 49 | 10 |
 | **Total** | | **~90** |
 
 The two training runs (cells 18 and 43) take 1-2 minutes each on CPU. Start cell 18 and then talk
@@ -65,18 +66,19 @@ through the "Think before running" question while it runs.
 | Block | Cells | Minutes |
 |---|---|---|
 | Setup, download, data inspection, Part 1 concepts | 0-7 | 10 |
-| Part 2 + Part 3: autoencoder, training, reconstruction, Exercise 1 | 8-15 | 20 |
+| Part 2 + Part 3: autoencoder, training, reconstruction (Exercise 1 additional) | 8-15 | 20 |
 | Part 4 + Part 5: latent extraction, PCA of latents | 16-20 | 15 |
-| Part 6: PCA before vs after autoencoding + Exercise 2 | 21-26 | 10 |
-| Part 7: simulated domain shift + Exercise 3 | 27-33 | 20 |
+| Part 6: PCA before vs after autoencoding (Exercise 2 additional) | 21-26 | 10 |
+| Part 7: simulated domain shift (Exercise 3 additional) | 27-33 | 20 |
 | Part 8: latent interpolation | 34-36 | 10 |
-| Part 9: downstream prediction + Exercise 4 | 37-41 | 10 |
-| Optional challenges (UMAP), diffusion bridge, wrap-up | 42-46 | 5 |
-| **Total** | | **~100** |
+| Part 9: downstream prediction (Exercise 4 additional) | 37-41 | 10 |
+| Diffusion bridge, wrap-up | 42-43 | 5 |
+| **Total** | | **~85** |
 
-Notebook 2 is deliberately slightly over-provisioned. If you are short of time, cut **Exercise 2**
-(the `latent_dim=2` retraining, cells 25-26) and the **UMAP** section (cells 43-44). That brings it
-to about 80 minutes. Exercise 2 is the only student task in either notebook that trains a model.
+Coding exercises are **additional** and can be skipped; the minutes above assume the CORE path
+(run guided cells and discuss). If a group does the Python exercises, add about 8-12 minutes
+per exercise. Additional Exercise 2 is the only student task in either notebook that trains a
+model (`latent_dim=2`).
 
 ### Suggested 3-hour schedule
 
@@ -102,8 +104,7 @@ automatically when present but is never required, and no cell depends on GPU mem
 | `pneumoniamnist_64.npz` (Zenodo, MedMNIST+) | 20.6 MB | `./medmnist_data/` |
 | ResNet-18 ImageNet weights (torchvision) | ~45 MB | `~/.cache/torch/hub/checkpoints/` |
 | `bloodmnist.npz` (Zenodo, MedMNIST v2) | 35.5 MB | `./medmnist_data/` |
-| `umap-learn` wheel (optional section only) | ~5 MB | pip cache |
-| **Total** | **~101 MB** (~106 MB with UMAP) | |
+| **Total** | **~101 MB** | |
 
 Well inside the 1 GB budget. Nothing is written to Google Drive; all files live in the ephemeral
 Colab working directory.
@@ -135,7 +136,6 @@ Record your own numbers when you run the pre-course check (section 5) and adjust
 | NB2 dataset download | 10-30 s | same |
 | NB2 autoencoder training (5,600 images, 20 epochs, batch 128) | 100-240 s | 20-40 s |
 | NB2 encoding, PCA, k-NN, logistic regressions | 1-15 s each | same (scikit-learn is CPU-only) |
-| NB2 UMAP (optional, two runs) | 20-60 s | same |
 | **Total heavy compute** | **~6-10 min** | **<2 GPU-minutes** |
 
 No single training operation exceeds the 3-5 minute CPU guideline. Every model is trained **once**
@@ -144,17 +144,14 @@ retraining. To force a retrain, delete the corresponding `.pt` file.
 
 ## Packages
 
-All preinstalled in a standard Colab runtime; **no `pip install` is needed for the core path**:
+All preinstalled in a standard Colab runtime; **no `pip install` is needed**:
 
 `numpy`, `pandas`, `matplotlib`, `torch`, `torchvision`, `scikit-learn`, `psutil` (optional, for
 the RAM report), standard library (`hashlib`, `urllib`, `os`, `time`, `random`, `contextlib`).
 
-Optional only: `umap-learn` (installed inside a `try/except` in the last optional section of
-Notebook 2; the section is skipped cleanly if the install fails).
-
 Deliberate non-dependencies: no `medmnist` package (the `.npz` files are downloaded directly from
 the official Zenodo record with MD5 verification), no `pytorch-grad-cam` (Grad-CAM is implemented
-in ~30 lines so the mechanism is visible), no `torchxrayvision`, no `umap` in the core path.
+in ~30 lines so the mechanism is visible), no `torchxrayvision`, no `umap-learn`.
 
 ---
 
@@ -324,7 +321,6 @@ particular trained autoencoder: increase the effect in `site_b_effect` (for exam
 | Cached weights load but the data settings were changed | stale checkpoint in `cached_weights/` | `!rm -rf cached_weights` and re-run the training cell. |
 | `TypeError` on `set_xticks(ticks, labels)` | matplotlib < 3.5 | Replace with `set_xticks(ticks)` followed by `set_xticklabels(labels)`. Colab is well above 3.5. |
 | `roc_auc_score` raises about missing classes | a class is absent from the test subset after edits | Keep the balanced subsets, or pass `labels=range(8)`. |
-| UMAP import fails after install (numba/llvmlite conflict) | Colab dependency drift | Skip the section; it is optional by design and the notebook handles it in a `try/except`. |
 | A Grad-CAM cell raises `element 0 of tensors does not require grad` | the model was wrapped in `torch.no_grad()` | Grad-CAM must run outside `no_grad`; the class already sets `x.requires_grad_(True)`. Do not add `@torch.no_grad()` to a cell that calls `cam_engine`. |
 | Kernel restart / disconnect mid-session | Colab idle timeout | Re-run all cells from the top: with `TRAIN_*=False`, recovery is seconds (reload instructor weights). |
 | Instructor weight download fails | GitHub raw URL blocked / offline | Place the three `.pt` files from the repo `weights/` folder into a local `weights/` directory in the Colab working directory, or set `TRAIN_*=True` and retrain. |
@@ -382,7 +378,7 @@ Common misconceptions to correct explicitly:
   decoder, not of biology.
 * **Cell 38 (linear probe).** Connect to foundation models and the label-scarcity economics of
   health research, which is the practical reason clinicians care about representation learning.
-* **Cells 45-46 (diffusion bridge).** Two sentences are enough: latent diffusion works in the space
+* **Cells 42-43 (diffusion bridge).** Two sentences are enough: latent diffusion works in the space
   you just built, and it inherits both the bottleneck's blind spots and the archive's batch
   structure.
 
@@ -400,10 +396,11 @@ Common misconceptions to correct explicitly:
 
 # 7. Complete solutions - Notebook 1
 
-Each block is a drop-in replacement for the corresponding exercise cell and uses only names that
-already exist in the notebook.
+These blocks are drop-in replacements for the **additional (optional coding)** exercise cells.
+They use only names that already exist in the notebook. Participants are not expected to complete
+them in class.
 
-## Exercise 1 - compare early and late feature maps
+## Additional Exercise 1 - compare early and late feature maps
 
 ```python
 # ===== EXERCISE 1 - SOLUTION =====
@@ -443,7 +440,7 @@ where spatial detail has been discarded. This matches the hierarchy in Part 1: e
 shared, deep = specific and coarse. Caution the participants that a single image pair is anecdotal;
 the honest version of this exercise averages over many images per class.
 
-## Exercise 2 - Grad-CAM on your own selection
+## Additional Exercise 2 - Grad-CAM on your own selection
 
 ```python
 # ===== EXERCISE 2 - SOLUTION =====
@@ -478,7 +475,7 @@ exposure or field of view, and the fact that the model has 24k parameters and no
 context. This is the moment to say that attribution maps are diagnostics of the model, not error
 analyses.
 
-## Exercise 3 - quantify attribution with occlusion
+## Additional Exercise 3 - quantify attribution with occlusion
 
 ```python
 # ===== EXERCISE 3 - SOLUTION =====
@@ -518,7 +515,7 @@ external data, a comparison with an independent reference standard (for example 
 annotations), or an experiment in which the biological signal is manipulated while the nuisance is
 held constant.
 
-## Exercise 4 - identify and quantify the shortcut
+## Additional Exercise 4 - identify and quantify the shortcut
 
 ```python
 # ===== EXERCISE 4 - SOLUTION =====
@@ -564,83 +561,13 @@ transportable. Reported performance should therefore be interpreted as site-spec
 validation on data from centres with different acquisition and annotation practices is required
 before any claim of generalisability.*
 
-## Optional challenges - Notebook 1
-
-```python
-# 1) How strong must the shortcut be?
-X_tr_weak, m_tr_weak = inject_shortcut(X_tr, y_tr, p_marker_pos=0.65, p_marker_neg=0.35,
-                                       rng=np.random.default_rng(11))
-X_va_weak, _ = inject_shortcut(X_va, y_va, p_marker_pos=0.65, p_marker_neg=0.35,
-                               rng=np.random.default_rng(12))
-cnn_weak = SmallCNN().to(DEVICE)
-with timed("train weak-shortcut model"):
-    fit_or_load(cnn_weak, "smallcnn_shortcut_weak.pt",
-                lambda: train_classifier(cnn_weak, X_tr_weak, y_tr, X_va_weak, y_va, epochs=6))
-for tname, X_set in test_sets.items():
-    p = predict_probs(cnn_weak, X_set)
-    print(f"{tname.replace(chr(10), ' '):24s} accuracy {accuracy_score(y_te, p.argmax(1)):.3f}")
-# Expect a much smaller internal-to-clean gap: with a weak association the marker is worth less
-# than the real signal, so the model relies on it less. There is no sharp threshold - reliance
-# scales with how predictive and how easy to extract the shortcut is.
-
-# 2) Grad-CAM sanity check on an untrained network
-random_net = SmallCNN().to(DEVICE)
-cam_random = GradCAM(random_net, random_net.block3)
-cams_r, _ = cam_random(prep_gray(X_te[sel[:4]]), class_idx=1)
-fig, axes = plt.subplots(1, 4, figsize=(8, 2.4))
-for col in range(4):
-    overlay_cam(axes[col], X_te[sel[col]], cams_r[col], title="random weights")
-plt.tight_layout(); plt.show()
-cam_random.close()
-# The maps are smooth, structured and completely meaningless: an untrained network still has
-# spatially varying activations and gradients. Structure in a heat map is not evidence of learning.
-# This is the intuition behind Adebayo et al. (2018), "Sanity checks for saliency maps".
-
-# 3) Occlusion sensitivity map
-i = int(sel[0])
-size, stride = 12, 4
-positions = list(range(0, 64 - size + 1, stride))
-sens = np.zeros((len(positions), len(positions)))
-base = p_pneumonia(cnn, X_te[i])
-for a, top in enumerate(positions):
-    for b, left in enumerate(positions):
-        sens[a, b] = base - p_pneumonia(cnn, occlude(X_te[i], top, left, size))
-sens_up = F.interpolate(torch.from_numpy(sens).float().view(1, 1, *sens.shape),
-                        size=(64, 64), mode="bilinear", align_corners=False)[0, 0].numpy()
-cam_i, _ = cam_engine(prep_gray(X_te[i]), class_idx=1)
-fig, axes = plt.subplots(1, 3, figsize=(7.5, 2.6))
-axes[0].imshow(X_te[i], cmap="gray"); axes[0].axis("off"); axes[0].set_title("input", fontsize=8)
-overlay_cam(axes[1], X_te[i], cam_i[0], title="Grad-CAM (1 backward pass)")
-overlay_cam(axes[2], X_te[i], (sens_up - sens_up.min()) / (np.ptp(sens_up) + 1e-8),
-            title=f"occlusion map ({sens.size} forward passes)")
-plt.tight_layout(); plt.show()
-# Occlusion measures the model's behaviour directly and needs no gradients, but costs one forward
-# pass per position and depends on the choice of occluder. Grad-CAM costs one backward pass but is
-# a first-order approximation restricted to one layer's resolution.
-
-# 4) Frozen-feature transfer-learning probe
-from sklearn.linear_model import LogisticRegression
-feature_extractor = nn.Sequential(*(list(resnet.children())[:-1])).eval().to(DEVICE)
-with torch.no_grad():
-    F_tr = feature_extractor(prep_rgb_imagenet(X_tr[:800])).flatten(1).cpu().numpy()
-    F_te = feature_extractor(prep_rgb_imagenet(X_te)).flatten(1).cpu().numpy()
-probe = LogisticRegression(max_iter=2000).fit(F_tr, y_tr[:800])
-p_probe = probe.predict_proba(F_te)[:, 1]
-print(f"ImageNet features + logistic regression: accuracy "
-      f"{accuracy_score(y_te, (p_probe > 0.5).astype(int)):.3f}, "
-      f"ROC-AUC {roc_auc_score(y_te, p_probe):.3f}")
-print(f"SmallCNN trained from scratch          : accuracy "
-      f"{accuracy_score(y_te, pred_te):.3f}, ROC-AUC {roc_auc_score(y_te, probs_te[:, 1]):.3f}")
-# Frozen ImageNet features usually get within a few points of the task-trained SmallCNN with 800
-# labels and no backpropagation through the backbone: a useful demonstration of why transfer
-# learning dominates small-sample medical imaging work.
-```
-
 ---
 
 # 8. Complete solutions - Notebook 2
 
-## Exercise 1 - reconstruction error as a quality-control statistic
+Same as Notebook 1: these are solutions for the **additional (optional coding)** exercises.
+
+## Additional Exercise 1 - reconstruction error as a quality-control statistic
 
 ```python
 # ===== EXERCISE 1 - SOLUTION =====
@@ -682,7 +609,7 @@ exclude images from centres whose acquisition differs from the training centre *
 types you probably care most about, which introduces selection bias in both the exposure and the
 outcome direction.
 
-## Exercise 2 - the bottleneck controls what is learned
+## Additional Exercise 2 - the bottleneck controls what is learned
 
 ```python
 # ===== EXERCISE 2 - SOLUTION =====
@@ -730,7 +657,7 @@ by clinical relevance. In a paper, report the downstream metric (accuracy on the
 about) as primary, not the reconstruction loss - and report the latent dimension as the design
 choice it is.
 
-## Exercise 3 - harmonise the simulated site effect
+## Additional Exercise 3 - harmonise the simulated site effect
 
 ```python
 # ===== EXERCISE 3 - SOLUTION =====
@@ -776,7 +703,7 @@ or train the representation with augmentation that makes it invariant to plausib
 changes - and in all cases report the site-predictability of the final representation as a
 diagnostic.
 
-## Exercise 4 - how many labels do you actually need?
+## Additional Exercise 4 - how many labels do you actually need?
 
 ```python
 # ===== EXERCISE 4 - SOLUTION =====
@@ -817,96 +744,13 @@ but must be described honestly; (ii) with 50-100 labels the confidence intervals
 single split can easily reverse the ordering - a proper version of this experiment repeats each
 sample size over several random draws and reports the spread.
 
-## Optional challenges - Notebook 2
-
-```python
-# 1) Denoising autoencoder: same loop, but the input is corrupted and the target stays clean
-def train_denoising(model, X, X_val=None, epochs=10, batch=128, lr=2e-3, sigma=0.15, seed=SEED):
-    model.to(DEVICE)
-    optimiser = torch.optim.Adam(model.parameters(), lr=lr)
-    history = {"epoch": [], "train_loss": [], "val_loss": []}
-    n = len(X)
-    for epoch in range(1, epochs + 1):
-        model.train()
-        order = torch.from_numpy(np.random.default_rng(seed + epoch).permutation(n))
-        running = 0.0
-        for start in range(0, n, batch):
-            xb = X[order[start:start + batch]].to(DEVICE)
-            noisy = (xb + sigma * torch.randn_like(xb)).clamp(0, 1)
-            optimiser.zero_grad(set_to_none=True)
-            x_hat, _ = model(noisy)
-            loss = F.mse_loss(x_hat, xb)          # target is the CLEAN image
-            loss.backward(); optimiser.step()
-            running += loss.item() * len(xb)
-        history["epoch"].append(epoch)
-        history["train_loss"].append(running / n)
-        history["val_loss"].append(float(np.mean(reconstruction_errors(model, X_val)))
-                                   if X_val is not None else float("nan"))
-        print(f"epoch {epoch}/{epochs}  train MSE {running / n:.5f}")
-    return history
-
-dae = ConvAutoencoder(latent_dim=32).to(DEVICE)
-with timed("train denoising autoencoder"):
-    fit_or_load(dae, "conv_dae_z32.pt",
-                lambda: train_denoising(dae, X_tr[:3000], X_te, epochs=10))
-Z_pool_dae = encode_all(dae, X_pool)
-Ztr_d, Zte_d, s_tr_d, s_te_d = train_test_split(Z_pool_dae, site, test_size=0.4,
-                                                random_state=SEED, stratify=site)
-sc_d = StandardScaler().fit(Ztr_d)
-clf_d = LogisticRegression(max_iter=2000).fit(sc_d.transform(Ztr_d), s_tr_d)
-print(f"site AUC, plain autoencoder {roc_auc_score(s_te, s_prob):.3f} vs denoising "
-      f"{roc_auc_score(s_te_d, clf_d.predict_proba(sc_d.transform(Zte_d))[:, 1]):.3f}")
-# Denoising makes the representation invariant to the noise it was trained against - not to gamma
-# or colour shifts. Expect the site AUC to stay high: invariance must be built against the specific
-# nuisance you care about, which is the core idea behind augmentation-based domain generalisation.
-
-# 2) Latent traversal
-i = int(np.flatnonzero(y_te == 6)[0])
-z0 = torch.from_numpy(Z_te[i]).float()
-sds = Z_te.std(0)
-dims = [0, 1, 2, 3]
-deltas = np.linspace(-3, 3, 7)
-fig, axes = plt.subplots(len(dims), len(deltas), figsize=(1.1 * len(deltas), 1.15 * len(dims)))
-for r, j in enumerate(dims):
-    for c, d in enumerate(deltas):
-        z = z0.clone(); z[j] = z0[j] + d * sds[j]
-        with torch.no_grad():
-            img = autoencoder.decode(z.view(1, -1).to(DEVICE))[0].cpu()
-        axes[r, c].imshow(to_image(img)); axes[r, c].axis("off")
-        if r == 0:
-            axes[r, c].set_title(f"{d:+.0f} sd", fontsize=7)
-    axes[r, 0].set_ylabel(f"z{j}", fontsize=7)
-plt.tight_layout(); plt.show()
-# Some dimensions visibly control brightness, size or hue; most control entangled mixtures. Plain
-# autoencoders have no disentanglement pressure, so "one dimension = one biological factor" is not
-# expected and should never be assumed.
-
-# 3) Clustering without labels
-from sklearn.cluster import KMeans
-from sklearn.metrics import adjusted_rand_score
-km_clean = KMeans(n_clusters=8, n_init=10, random_state=SEED).fit_predict(Z_te)
-km_pool = KMeans(n_clusters=8, n_init=10, random_state=SEED).fit_predict(Z_pool)
-print(f"ARI vs true cell type, single site  : {adjusted_rand_score(y_te, km_clean):.3f}")
-print(f"ARI vs true cell type, two sites    : {adjusted_rand_score(y_pool, km_pool):.3f}")
-print(f"ARI vs SITE label, two sites        : {adjusted_rand_score(site, km_pool):.3f}")
-# The third number is the interesting one: some clusters track the simulated site rather than
-# biology. This is exactly how "novel subtypes" can turn out to be scanners.
-
-# 4) Variational bottleneck - expected answer
-# A VAE adds KL(q(z|x) || N(0, I)) to the reconstruction loss. This forces the aggregate posterior
-# towards a known prior, so points sampled from N(0, I) land in regions the decoder has been trained
-# to map to plausible images. A plain autoencoder has no such constraint: its latent codes occupy an
-# arbitrary, possibly disconnected region, so sampling from a standard normal decodes to nonsense.
-# Latent diffusion needs a well-behaved, roughly isotropic latent space to noise and denoise, which
-# is why its first stage is a (KL- or VQ-regularised) autoencoder rather than a plain one.
-```
-
 ---
 
 # 9. Answer keys for the discussion questions
 
 Short model answers. They are deliberately compressed; the value is in the discussion, not the
-wording.
+wording. In class, participants are asked to think these through with a neighbour rather than
+write them down.
 
 ## Notebook 1
 
@@ -1068,12 +912,12 @@ across centres.
 
 | Situation | What to change |
 |---|---|
-| Only 2 hours available | Notebook 1: keep Parts 1-5 and 7, drop Part 6 and Exercise 3. Notebook 2: keep Parts 1-5 and 7 and 9, drop Exercise 2 and UMAP. |
-| Participants are slower than expected | Assign Exercises 1 and 3 (NB1) and Exercise 1 (NB2) as homework; run the guided cells together. |
+| Only 2 hours available | Skip all additional coding. Notebook 1: keep Parts 1-5 and 7, drop Part 6 if needed. Notebook 2: keep Parts 1-5, 7 and 9. |
+| Participants are slower than expected | Skip all additional coding; run the guided cells together and use the interpretation questions as pair discussion. |
 | GPU available for everyone | Nothing needs to change. Optionally raise the subsets (`1200 -> 3000` per class in NB1, `700 -> 1500` in NB2) and epochs; retrain times stay under a minute. |
 | You want stored outputs for a reference copy | Run both notebooks once end to end in Colab and save a copy as `*_solved.ipynb`; keep the distributed versions output-free. |
 | Fully offline teaching room | Pre-download `pneumoniamnist_64.npz`, `bloodmnist.npz` and the ResNet-18 checkpoint, distribute them, and replace the `download(...)` calls with local paths (`resnet18` then needs `weights=None` plus `load_state_dict`). |
-| Assessment | The four interpretation blocks of each notebook work well as a short written assignment; the shortcut-learning limitations paragraph (NB1 Exercise 4) is the single best assessment item. |
+| Assessment | The interpretation blocks work well as plenary discussion (the class default) or as an optional written assignment afterwards. The shortcut-learning limitations discussion (NB1 Additional Exercise 4) is the single best assessment item. |
 
 ## Provenance of this material
 

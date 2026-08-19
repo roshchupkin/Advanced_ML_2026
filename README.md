@@ -19,7 +19,7 @@ Practical materials for the Advanced Data Science and Machine Learning for Healt
 | Thursday | **Hands-on practicals ← this repository** |
 | Friday | Transformers & advanced applications |
 
-These two notebooks are written for clinical researchers, epidemiologists, biomedical scientists, and data scientists who already know Python, basic machine learning, train/validation/test splitting, cross-validation, overfitting, regularization, and basic neural networks.
+These two notebooks are written for clinical researchers, epidemiologists, biomedical scientists, and data scientists who know basic machine learning, train/validation/test splitting, cross-validation, overfitting, regularization, and basic neural networks. Participants **run prepared Python cells** and discuss; they are not expected to write code.
 
 ## Open in Colab
 
@@ -44,8 +44,8 @@ Both practicals ask one scientific question:
 - a **simulated** shortcut-learning experiment
 - confounding, domain shift, and external validity
 
-**CORE:** feature maps → Grad-CAM → perturbation → shortcut experiment  
-**EXTENSION:** optional challenges at the end
+**CORE:** feature maps → Grad-CAM → perturbation → shortcut experiment (run the cells and discuss with your neighbour)  
+**ADDITIONAL:** optional coding exercises, if you have time and want extra Python practice
 
 ### Practical 2 — Autoencoders and latent representations (~75–90 min)
 
@@ -55,8 +55,8 @@ Both practicals ask one scientific question:
 - a **simulated** two-site acquisition/domain-shift experiment
 - latent interpolation and a short bridge to latent diffusion
 
-**CORE:** reconstruction → latent PCA → simulated site effect → latent interpolation  
-**EXTENSION:** bottleneck size, harmonization, label efficiency, UMAP
+**CORE:** reconstruction → latent PCA → simulated site effect → latent interpolation (run the cells and discuss with your neighbour)  
+**ADDITIONAL:** optional coding exercises (bottleneck size, harmonization, label efficiency), if you have time and want extra Python practice
 
 ## Computational design (CPU-first)
 
